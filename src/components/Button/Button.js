@@ -1,6 +1,5 @@
 import { ButtonStyle } from './Button.styled';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 export const Button = ({ onLoadMore }) => {
   // if (this.props)

@@ -1,30 +1,27 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Ovrelay, ModalStyle } from './Modal.styled';
 const modalRoots = document.querySelector('#modal-root');
-export class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
-  }
+export const Modal = ({ closeKeyDown, onCloseModal, largeImage }) => {
+  useEffect(() => {
+    const handleKeyDown = evt => {
+      if (evt.code === 'Escape') {
+        closeKeyDown();
+      }
+    };
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
-  }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [closeKeyDown]);
 
-  handleKeyDown = evt => {
-    if (evt.code === 'Escape') {
-      this.props.closeKeyDown();
-    }
-  };
-  render() {
-    const { largeImage, onCloseModal } = this.props;
-    return createPortal(
-      <Ovrelay onClick={onCloseModal}>
-        <ModalStyle>
-          <img src={largeImage} alt="" />
-        </ModalStyle>
-      </Ovrelay>,
-      modalRoots
-    );
-  }
-}
+  return createPortal(
+    <Ovrelay onClick={onCloseModal}>
+      <ModalStyle>
+        <img src={largeImage} alt="" />
+      </ModalStyle>
+    </Ovrelay>,
+    modalRoots
+  );
+};
